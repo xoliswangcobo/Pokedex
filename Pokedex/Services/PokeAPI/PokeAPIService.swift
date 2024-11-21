@@ -24,8 +24,7 @@ extension PokeAPIService {
 
 class PokeAPIServiceImplementation: PokeAPIService {
     
-    // Injection
-    private let apiClient: PokeAPIClient = PokeAPIClientImplementation()
+    @Inject private var apiClient: PokeAPIClient
     
     func getPokemons(limit: Int, offset: Int) async throws -> [Pokemon] {
         let request = GetPokemonsRequest()

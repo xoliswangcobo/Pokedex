@@ -11,10 +11,9 @@ import UIKit
 
 class PokemonListViewModel: ObservableObject {
     
-    // Injection
-    private let service: PokeAPIService = PokeAPIServiceImplementation()
-    private let imageCache: ImageCache = ImageCacheImplementation.shared
-    private let dataCache = DataCacheImplementation.shared
+    @Inject private var service: PokeAPIService
+    @Inject private var imageCache: ImageCache
+    @Inject private var dataCache: DataCache
     
     @Published var pokemons: [Pokemon] = []
     @Published var error: Error?

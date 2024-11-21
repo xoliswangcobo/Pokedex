@@ -7,21 +7,25 @@
 
 import SwiftUI
 import WebKit
+import SDWebImageSwiftUI
 
 struct PokemonDetailsView: View {
     
     @Binding var showdownSprite: Data?
     var pokemon: Pokemon
-    private let useWebView: Bool = false
+    private let useView = PlayerChoice.animatedimage
     
     var body: some View {
         ScrollView {
             VStack {
                 if let showdownSprite {
-                    if useWebView, let showdownSpriteURL = pokemon.showsownSpriteURL {
-                        GifImageWebView(showdownSprite, url: showdownSpriteURL)
-                            .frame(width: 300, height: 300)
-                    } else {
+                    switch useView {
+                    case .webview:
+                        if let showdownSpriteURL = pokemon.showsownSpriteURL {
+                            GifImageWebView(showdownSprite, url: showdownSpriteURL)
+                                .frame(width: 300, height: 300)
+                        }
+                        case .imagerenderer:
                         GifImageView(showdownSprite)
                             .frame(width: 300, height: 300)
                             .padding(16)
@@ -32,7 +36,17 @@ struct PokemonDetailsView: View {
                                     .stroke(Color.green.opacity(0.3), lineWidth: 3)
                             )
                             .padding(16)
-                        
+                    case .animatedimage:
+                        AnimatedImage(data: showdownSprite)
+                            .frame(width: 300, height: 300)
+                            .padding(16)
+                            .background(Color.gray.opacity(0.2))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.green.opacity(0.3), lineWidth: 3)
+                            )
+                            .padding(16)
                         
                     }
                 } else {
@@ -47,6 +61,12 @@ struct PokemonDetailsView: View {
         .navigationBarTitleDisplayMode(.large)
         
     }
+}
+
+fileprivate enum PlayerChoice {
+    case webview
+    case imagerenderer
+    case animatedimage
 }
 
 fileprivate struct GifImageWebView: UIViewRepresentable {
