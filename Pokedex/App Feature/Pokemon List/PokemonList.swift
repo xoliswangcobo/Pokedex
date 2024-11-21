@@ -28,6 +28,7 @@ struct PokemonList: View {
             }
             .navigationTitle("Pokemons")
         }
+        .tint(.green)
         .scrollContentBackground(.hidden)
         .listStyle(.plain)
         .listBackground(.white)

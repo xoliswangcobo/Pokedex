@@ -11,11 +11,12 @@ struct PokemonItemView: View {
     
     @EnvironmentObject var viewModel: PokemonListViewModel
     @State var avatarURL: URL?
+    @State var showdownAvatar: Data?
     
     var pokemon: Pokemon
     
     var body: some View {
-        NavigationLink(destination: PokemonDetailsView(pokemon: pokemon)) {
+        NavigationLink(destination: PokemonDetailsView(showdownSprite: $showdownAvatar, pokemon: pokemon)) {
             HStack {
                 AsyncImage(url: avatarURL) { image in
                     image
@@ -42,11 +43,18 @@ struct PokemonItemView: View {
             .task {
                 if pokemon.details == nil {
                     do {
-                        let details = try await viewModel.fetchDetails(for: pokemon)
+                        try await viewModel.fetchDetails(for: pokemon)
+                        
                         await MainActor.run {
-                            self.pokemon.details = details
-                            self.avatarURL = URL(string: details.sprites.front)
+                            if let url = pokemon.frontSpriteURL {
+                                self.avatarURL = URL(string: url)
+                            }
                         }
+                        
+                        viewModel.fetchShowdownImagedata(for: pokemon) { data in
+                           self.showdownAvatar = data
+                        }
+                        
                     } catch {
                         print(error)
                     }
