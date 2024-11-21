@@ -19,7 +19,7 @@ struct PokemonList: View {
                         .listRowSeparator(.hidden)
                         .listRowBackground(
                             Rectangle()
-                                .fill(Color.blue.opacity(0.2))
+                                .fill(.clear)
                                 .cornerRadius(10.0)
                                 .padding(.vertical, 4.0)
                                 .padding(.horizontal, 16.0)

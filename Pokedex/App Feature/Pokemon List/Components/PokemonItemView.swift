@@ -10,56 +10,70 @@ import SwiftUI
 struct PokemonItemView: View {
     
     @EnvironmentObject var viewModel: PokemonListViewModel
-    @State var avatarURL: URL?
+    @State var avatar: Image?
     @State var showdownAvatar: Data?
+    @State var typeColor: Color?
     
     var pokemon: Pokemon
     
     var body: some View {
-        NavigationLink(destination: PokemonDetailsView(showdownSprite: $showdownAvatar, pokemon: pokemon)) {
+        ZStack(alignment: .leading) {
+            NavigationLink(destination: PokemonDetailsView(showdownSprite: $showdownAvatar, pokemon: pokemon)) { EmptyView() }.opacity(0)
+            
             HStack {
-                AsyncImage(url: avatarURL) { image in
-                    image
+                if let avatar {
+                    avatar
                         .resizable()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 80, height: 80)
+                        .background(.gray)
                         .clipShape(Circle())
-                        .padding()
-                } placeholder: {
+                    
+                } else {
                     Image("pokeball")
                         .resizable()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 80, height: 80)
+                        .background(.gray)
                         .clipShape(Circle())
-                        .padding()
                 }
                 
+                Spacer()
+                
                 VStack {
-                    Text(pokemon.name)
-                        .padding()
-                    
-                    Text(pokemon.id)
-                        .padding()
+                    Text(pokemon.name.capitalized).fontWeight(.semibold)
+                        .padding(.trailing, 16)
                 }
             }
-            .task {
-                if pokemon.details == nil {
-                    do {
-                        try await viewModel.fetchDetails(for: pokemon)
-                        
-                        await MainActor.run {
-                            if let url = pokemon.frontSpriteURL {
-                                self.avatarURL = URL(string: url)
-                            }
+            .padding(8)
+            .background(typeColor ?? .blue.opacity(0.2))
+            .cornerRadius(12)
+        }
+        .task {
+            if pokemon.details == nil {
+                do {
+                    try await viewModel.fetchDetails(for: pokemon)
+                    
+                    viewModel.fetchImage(for: pokemon) { image in
+                        DispatchQueue.main.async {
+                            self.avatar = Image(uiImage: image)
                         }
-                        
-                        viewModel.fetchShowdownImagedata(for: pokemon) { data in
-                           self.showdownAvatar = data
-                        }
-                        
-                    } catch {
-                        print(error)
                     }
+                    
+                    await MainActor.run {
+                        if let typeColor = pokemon.details?.types.first?.colorHex {
+                            self.typeColor = Color(hex: typeColor)
+                        }
+                    }
+                    
+                    viewModel.fetchShowdownImagedata(for: pokemon) { data in
+                       self.showdownAvatar = data
+                    }
+                    
+                    
+                } catch {
+                    print(error)
                 }
             }
         }
+        
     }
 }

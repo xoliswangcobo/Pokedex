@@ -35,8 +35,7 @@ struct PokemonDetail: Codable {
         stats = try container.decode([PokemonStat].self, forKey: .stats)
         let spritesContainerDecoded = try container.decode(PokemonSpritesContainer.self, forKey: .sprites)
         sprites = spritesContainerDecoded.sprites
-        let typeContainersDecoded = try container.decode([PokemonTypesContainer].self, forKey: .types)
-        types = typeContainersDecoded.map { $0.type }
+        types = try container.decode([PokemonType].self, forKey: .types)
     }
 }
 

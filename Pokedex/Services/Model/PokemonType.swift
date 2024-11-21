@@ -1,5 +1,5 @@
 //
-//  PokemonTypesContainer.swift
+//  PokemonType.swift
 //  Pokedex
 //
 //  Created by Xoliswa X on 2024/11/21.
@@ -25,6 +25,21 @@ enum PokemonType: String, Codable {
     case dark
     case fairy
     case other
+    
+    enum OuterKey: String, CodingKey {
+        case type
+    }
+
+    enum InnerKey: String, CodingKey {
+        case name
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: OuterKey.self)
+        let theTypeContainer = try container.nestedContainer(keyedBy: InnerKey.self, forKey: .type)
+        let theType = try theTypeContainer.decode(String.self, forKey: .name)
+        self = PokemonType(rawValue: theType) ?? .other
+    }
     
     var colorHex: String {
         switch self {
@@ -67,24 +82,5 @@ enum PokemonType: String, Codable {
         case .other:
             return "83cfc5"
         }
-    }
-}
-
-struct PokemonTypesContainer: Codable {
-    let type: PokemonType
-    
-    enum OuterKey: String, CodingKey {
-        case type
-    }
-
-    enum InnerKey: String, CodingKey {
-        case name
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: OuterKey.self)
-        let theTypeContainer = try container.nestedContainer(keyedBy: InnerKey.self, forKey: .type)
-        let theType = try theTypeContainer.decode(String.self, forKey: .name)
-        type = PokemonType(rawValue: theType) ?? .other
     }
 }

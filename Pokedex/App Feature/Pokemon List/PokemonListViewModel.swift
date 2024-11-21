@@ -26,7 +26,6 @@ class PokemonListViewModel: ObservableObject {
                 self.pokemons = newPokemons
             }
         } catch {
-            print(error)
             self.error = error
         }
     }
@@ -52,7 +51,6 @@ class PokemonListViewModel: ObservableObject {
                         completion(UIImage(named: "pokeball")!)
                     }
                 } catch {
-                    print(error)
                     self.error = error
                 }
             }
@@ -71,7 +69,6 @@ class PokemonListViewModel: ObservableObject {
                     dataCache.setData(data, forKey: url)
                     completion(data)
                 } catch {
-                    print(error)
                     self.error = error
                 }
             }
