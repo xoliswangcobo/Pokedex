@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// @mockable
 protocol PokeAPIRequest {
     
     var httpMethod: HTTPMethod { get }

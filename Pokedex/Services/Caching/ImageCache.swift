@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// @mockable
 protocol ImageCache {
     
     func getImage(forKey key: String) -> UIImage?

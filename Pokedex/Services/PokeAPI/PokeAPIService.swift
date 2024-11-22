@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// @mockable
 protocol PokeAPIService {
     
     func getPokemons(limit: Int, offset: Int) async throws -> [Pokemon]
