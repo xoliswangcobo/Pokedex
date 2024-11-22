@@ -15,8 +15,19 @@ class PokemonListViewModel: ObservableObject {
     @Inject private var imageCache: ImageCache
     @Inject private var dataCache: DataCache
     
-    @Published var pokemons: [Pokemon] = []
+    @Published private var pokemons: [Pokemon] = []
     @Published var error: Error?
+    @Published var searchText: String = ""
+    
+    var listPokemons: [Pokemon] {
+        if searchText.isEmpty {
+            return pokemons
+        } else {
+            return pokemons.filter {
+                $0.name.contains(searchText.lowercased()) || ($0.details?.types.filter { $0.rawValue.contains(searchText.lowercased()) }.isEmpty == false)
+            }
+        }
+    }
     
     func fetchPokemons() async {
         do {

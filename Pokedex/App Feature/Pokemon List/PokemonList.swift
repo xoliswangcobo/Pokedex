@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct PokemonList: View {
+    
     @StateObject var viewModel = PokemonListViewModel()
+    @State var searchIsActive = false
     
     var body: some View {
         NavigationStack {
             VStack {
-                List(viewModel.pokemons) { pokemon in
+                List(viewModel.listPokemons) { pokemon in
                     PokemonItemView(pokemon: pokemon)
                         .environmentObject(viewModel)
                         .listRowSeparator(.hidden)
@@ -28,6 +30,7 @@ struct PokemonList: View {
             }
             .navigationTitle("Pokemons")
         }
+        .searchable(text: $viewModel.searchText)
         .tint(.green)
         .scrollContentBackground(.hidden)
         .listStyle(.plain)
