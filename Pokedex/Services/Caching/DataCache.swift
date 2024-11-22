@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// @mockable
 protocol DataCache {
     
     func getData(forKey key: String) -> Data?

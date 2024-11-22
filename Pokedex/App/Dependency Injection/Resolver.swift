@@ -17,4 +17,8 @@ class Resolver {
     func resolve<T>(_ type: T.Type) -> T {
         container.resolve(T.self)!
     }
+    
+    class func setContainer(_ container: Container) {
+        Resolver.shared.container = container
+    }
 }

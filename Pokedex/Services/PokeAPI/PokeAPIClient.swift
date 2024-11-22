@@ -6,6 +6,7 @@
 //
 import Foundation
 
+/// @mockable
 protocol PokeAPIClient {
     
     func request(_ request: URLRequest) async throws -> Data
@@ -26,7 +27,6 @@ class PokeAPIClientImplementation: PokeAPIClient {
             }
             
             if (200...299).contains(httpResponse.statusCode) {
-                print("Request URL: \(request.url?.absoluteString ?? "No URL"), Response: \(String(decoding: data, as: UTF8.self))")
                 return data
             }
             
