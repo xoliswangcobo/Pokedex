@@ -37,6 +37,16 @@ struct PokemonDetail: Codable {
         sprites = spritesContainerDecoded.sprites
         types = try container.decode([PokemonType].self, forKey: .types)
     }
+    
+    init(height: Int, weight: Int, abilities: [PokemonAbility], sprites: [PokemonSprite], cries: PokemonCries, stats: [PokemonStat], types: [PokemonType]) {
+        self.height = height
+        self.weight = weight
+        self.abilities = abilities
+        self.sprites = sprites
+        self.cries = cries
+        self.stats = stats
+        self.types = types
+    }
 }
 
 struct PokemonAbility: Codable {
