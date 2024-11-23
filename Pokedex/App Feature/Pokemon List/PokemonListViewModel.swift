@@ -23,8 +23,9 @@ class PokemonListViewModel: ObservableObject {
         if searchText.isEmpty {
             return pokemons
         } else {
+            let searchTextLowered = searchText.lowercased()
             return pokemons.filter {
-                $0.name.contains(searchText.lowercased()) || ($0.details?.types.filter { $0.rawValue.contains(searchText.lowercased()) }.isEmpty == false)
+                $0.name.lowercased().contains(searchTextLowered) || ($0.details?.types.filter { $0.rawValue.lowercased().contains(searchTextLowered) }.isEmpty == false)
             }
         }
     }
