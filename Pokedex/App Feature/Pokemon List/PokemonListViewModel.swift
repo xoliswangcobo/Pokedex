@@ -41,9 +41,15 @@ class PokemonListViewModel: ObservableObject {
         }
     }
     
-    func fetchDetails(for pokemon: Pokemon) async throws {
-        let details = try await service.getPokemonDetails(pokemon: pokemon)
-        pokemon.details = details
+    func fetchDetails(for pokemon: Pokemon) async {
+        do {
+            let details = try await service.getPokemonDetails(pokemon: pokemon)
+            pokemon.details = details
+        } catch {
+            await MainActor.run {
+                self.error = error
+            }
+        }
     }
     
     func fetchImage(for pokemon: Pokemon, completion: @escaping (UIImage) -> Void) {

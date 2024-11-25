@@ -11,9 +11,10 @@ class Pokemon: Codable, Identifiable {
     let name: String
     let url: String
     
-    init(name: String, url: String) {
+    init(name: String, url: String, details: PokemonDetail? = nil) {
         self.name = name
         self.url = url
+        self.details = details
     }
     
     var id: String {

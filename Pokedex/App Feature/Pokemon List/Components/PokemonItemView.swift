@@ -48,28 +48,25 @@ struct PokemonItemView: View {
             .cornerRadius(12)
         }
         .onError(error: $viewModel.error, title: "Pokedex", actions: [ ("Okay", {}) ])
-        .task {
-            
-            if pokemon.details == nil {
-                do {
-                    try await viewModel.fetchDetails(for: pokemon)
-                } catch {
-                    viewModel.error = error
+        .onAppear {
+            Task {
+                if pokemon.details == nil {
+                    await viewModel.fetchDetails(for: pokemon)
                 }
-            }
-            
-            if let typeColor = pokemon.details?.types.first?.colorHex {
-                self.typeColor = Color(hex: typeColor)
-            }
-            
-            viewModel.fetchImage(for: pokemon) { image in
-                DispatchQueue.main.async {
-                    self.avatar = Image(uiImage: image)
+                
+                if let typeColor = pokemon.details?.types.first?.colorHex {
+                    self.typeColor = Color(hex: typeColor)
                 }
-            }
-            
-            viewModel.fetchShowdownImagedata(for: pokemon) { data in
-               self.showdownAvatar = data
+                
+                viewModel.fetchImage(for: pokemon) { image in
+                    DispatchQueue.main.async {
+                        self.avatar = Image(uiImage: image)
+                    }
+                }
+                
+                viewModel.fetchShowdownImagedata(for: pokemon) { data in
+                    self.showdownAvatar = data
+                }
             }
         }
         
