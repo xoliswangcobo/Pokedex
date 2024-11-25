@@ -27,6 +27,9 @@ struct PokemonList: View {
                                 .padding(.horizontal, 16.0)
                         )
                 }
+                .refreshable {
+                    await viewModel.fetchPokemons()
+                }
             }
             .navigationTitle("Pokemons")
         }
@@ -36,9 +39,6 @@ struct PokemonList: View {
         .listStyle(.plain)
         .listBackground(.white)
         .task {
-            await viewModel.fetchPokemons()
-        }
-        .refreshable {
             await viewModel.fetchPokemons()
         }
     }

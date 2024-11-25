@@ -70,5 +70,10 @@ struct PokemonAbility: Codable {
 struct PokemonCries: Codable {
     let latest: String
     let legacy: String
+    
+    init(latest: String, legacy: String) {
+        self.latest = latest
+        self.legacy = legacy
+    }
 }
 
